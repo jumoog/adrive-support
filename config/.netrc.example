@@ -1,0 +1,3 @@
+# example .netrc file for auto login to adrive 
+# put .netrc in ~ and edit accordingly
+machine ftp.adrive.com login adrive@accountemail.com password AdRiVePassWord
