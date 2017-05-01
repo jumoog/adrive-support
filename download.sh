@@ -10,10 +10,11 @@ if [ $# -eq 0 ]
     echo ${red}"   download.sh ${green}url password${reset}"
     exit
 fi
-rm -rf cookies.txt
-rm -rf out
-tmp=$(curl -X POST -c cookies.txt -d "password=${2}" ${1} > out)
-url2=$(grep -Po 'https:.*?[.]html' out | head -1)
-curl -b cookies.txt -O -J -L $url2
-rm -rf cookies.txt
-rm -rf out
+# create a tmp file
+cookie=$(mktemp)
+# extract cookie and url
+tmp=$(curl -X POST -c ${cookie} -s -d "password=${2}" ${1} | grep -Eo 'https:.*?[.]html' | uniq)
+# download the file
+curl -b ${cookie} -O -J -L $tmp
+# remove the cookie
+rm -rf $cookie
